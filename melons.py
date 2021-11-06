@@ -6,7 +6,7 @@ class AbstractMelonOrder():
 
     def __init__(self, species, qty, order_type, tax, country_code="USA"):
         """Initialize melon order attributes."""
-        self.species = species
+        self.species = species.lower()
         self.qty = qty
         self.shipped = False
         self.order_type = order_type
@@ -18,8 +18,11 @@ class AbstractMelonOrder():
         """Calculate price, including tax."""
 
         base_price = 5
+        if "christmas" in self.species:
+            base_price *= 1.5
         total = (1 + self.tax) * self.qty * base_price
-
+        if self.order_type == "international" and self.qty < 10:
+            total += 3
         return total
 
     def mark_shipped(self):
