@@ -54,12 +54,29 @@ class InternationalMelonOrder(AbstractMelonOrder):
 class GovernmentMelonOrder(AbstractMelonOrder):
     """A security-inspected melon order."""
 
-    def __init__(self, species, qty, country_code):
-        """Initialize melon order attributes."""
-        super().__init__(species=species, qty=qty, country_code=country_code, order_type="international", tax=0)
+    def __init__(self, species, qty, country_code="USA"):
+        """Initialize melon order attributes.
+        
+        The optional country_code will allow our government to ship our fine, inspected
+        melons to troops stationed all over the world.
+        """
+        
+        order_type="domestic" if country_code == "USA" else "international"
+        super().__init__(species=species, qty=qty, country_code=country_code, order_type=order_type, tax=0)
         self.passed_inspection = False
 
-    def passed_inspection(passed):
+    def passed_or_failed_inspection(self, passed: bool):
         """Record the fact than an order has been inspected."""
 
         self.passed_inspection = passed
+
+melon_instance = GovernmentMelonOrder(species="wATer", qty=4)
+print(melon_instance.species)
+print(melon_instance.qty)
+print(melon_instance.shipped)
+print(melon_instance.tax)
+print(melon_instance.country_code)
+print(melon_instance.order_type)
+print(melon_instance.passed_inspection)
+melon_instance.passed_or_failed_inspection(passed=True)
+print(melon_instance.passed_inspection)
