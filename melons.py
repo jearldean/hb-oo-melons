@@ -50,3 +50,16 @@ class InternationalMelonOrder(AbstractMelonOrder):
     def __init__(self, species, qty, country_code):
         """Initialize melon order attributes."""
         super().__init__(species=species, qty=qty, country_code=country_code, order_type="international", tax=0.17)
+
+class GovernmentMelonOrder(AbstractMelonOrder):
+    """A security-inspected melon order."""
+
+    def __init__(self, species, qty, country_code):
+        """Initialize melon order attributes."""
+        super().__init__(species=species, qty=qty, country_code=country_code, order_type="international", tax=0)
+        self.passed_inspection = False
+
+    def passed_inspection(passed):
+        """Record the fact than an order has been inspected."""
+
+        self.passed_inspection = passed
