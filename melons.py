@@ -1,5 +1,8 @@
 """Classes for melon orders."""
 
+import sys
+from random import choice
+
 
 class AbstractMelonOrder():
     """An abstract base class that other Melon Orders inherit from."""
@@ -8,6 +11,8 @@ class AbstractMelonOrder():
         """Initialize melon order attributes."""
         self.species = species.lower()
         self.qty = qty
+        if self.qty > 100:
+            raise TooManyMelonsError('We can not sell more than 100 melons.')
         self.shipped = False
         self.order_type = order_type
         self.tax = tax
@@ -17,7 +22,8 @@ class AbstractMelonOrder():
     def get_total(self):
         """Calculate price, including tax."""
 
-        base_price = 5
+        splurge_pricing = choice(range(5, 10))
+        base_price = splurge_pricing
         if "christmas" in self.species:
             base_price *= 1.5
         total = (1 + self.tax) * self.qty * base_price
@@ -51,6 +57,7 @@ class InternationalMelonOrder(AbstractMelonOrder):
         """Initialize melon order attributes."""
         super().__init__(species=species, qty=qty, country_code=country_code, order_type="international", tax=0.17)
 
+
 class GovernmentMelonOrder(AbstractMelonOrder):
     """A security-inspected melon order."""
 
@@ -70,7 +77,15 @@ class GovernmentMelonOrder(AbstractMelonOrder):
 
         self.passed_inspection = passed
 
-melon_instance = GovernmentMelonOrder(species="wATer", qty=4)
+class TooManyMelonsError(Exception):
+    """Because of a rise in money laundering through wholesale melon purchases, 
+    UberMelon can not allow orders of more than 100 melons."""
+
+    def __init__(self, message):
+        self.message = message
+
+
+melon_instance = GovernmentMelonOrder(species="wATer", qty=100)
 print(melon_instance.species)
 print(melon_instance.qty)
 print(melon_instance.shipped)
@@ -80,3 +95,7 @@ print(melon_instance.order_type)
 print(melon_instance.passed_inspection)
 melon_instance.passed_or_failed_inspection(passed=True)
 print(melon_instance.passed_inspection)
+print(melon_instance.get_total())
+print(melon_instance.get_total())
+print(melon_instance.get_total())
+print(melon_instance.get_total())
